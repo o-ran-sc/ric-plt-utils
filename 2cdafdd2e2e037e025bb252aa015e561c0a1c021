@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b7e291bf_0914e701",
+        "filename": ".gitreview",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-07-07T19:14:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5170dad_f75a988b",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 1
+      },
+      "revId": "2cdafdd2e2e037e025bb252aa015e561c0a1c021",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5dd7a4d8_5e815152",
         "filename": ".gitreview",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "2cdafdd2e2e037e025bb252aa015e561c0a1c021",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3273b20e_f3aa8f78",
+        "filename": ".gitreview",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-07-07T19:14:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dd7a4d8_5e815152",
+      "revId": "2cdafdd2e2e037e025bb252aa015e561c0a1c021",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
