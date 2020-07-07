@@ -22,6 +22,30 @@
       "revId": "57579d286ca11a0d84393821720d23bc126b03c9",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd1f4055_4a6ad401",
+        "filename": ".gitreview",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-07-07T19:20:21Z",
+      "side": 1,
+      "message": "Spending my day in Dockerfiles where trailing slants seem to be necessary :)",
+      "parentUuid": "bb8711d5_de9a33b3",
+      "range": {
+        "startLine": 4,
+        "startChar": 21,
+        "endLine": 4,
+        "endChar": 22
+      },
+      "revId": "57579d286ca11a0d84393821720d23bc126b03c9",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
