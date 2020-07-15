@@ -1,0 +1,14 @@
+
+{
+	"comment": "this is test data to generate a measurement",
+
+	"data": [
+		{ "name": "m1", "type": "none", "value": 100 },
+		{ "name": "m2", "type": "none", "value": 200 },
+		{ "name": "m3", "type": "none", "value": 300 },
+		{ "name": "m4", "type": "none", "value": true },
+		{ "name": "m5", "type": "none", "value": false },
+		{ "name": "m6", "type": "none", "value": "HOT"},
+		{ "name": "m7", "type": "none", "value":  null }
+	]
+}
