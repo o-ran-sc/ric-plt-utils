@@ -1,0 +1,11 @@
+# various output files (don't save generated files)
+*.ps
+*.rst
+*.md
+*.pdf
+
+# intermediate files which can lie around
+*.ca
+*.sp
+*.bcnfile
+*.toc

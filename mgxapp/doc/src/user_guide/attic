@@ -1,0 +1,43 @@
+
+.gv semver
+.dv _v [ &{_major!0} 100 * &{_minor!0} 10 * + &{_patch!0} + ]]
+.if  _v 232 <
+	.dv _err ### ERROR ###  {X}fm version 2.3.2 or later is required to generate this doc
+	.qu
+.fi
+
+.gv e XFM_PATH xpath
+.if ! xpath
+	.gv e TFM_PATH xpath
+	.if ! xpath
+		.mg ### WARNING ###  XFM_PATH should be set to reference the shared imbed files; likely these are in /usr/local/share/xfm
+	.fi
+.xx 0
+.fi
+
+.**	forward variable reference support
+.** define a 'subroutine' to add a variable and place it into the forward reference file
+.** fref_sub.ca contains code to execute by the set_fref macor and fref.ca contains the
+.** forward references to include during pass2. The macro set_ref will define the variable
+.** passed as $1 (name) with the value passed as $2 and will add it to the fref.ca file.
+.**
+.ca shift start _fref_sub.ca
+	.** be careful... the next  'ca end' MUST be tab indented before {X} version 2.4.
+	.** with 2.4 and after it can be space indented
+
+	.ca expand extend _fref.ca
+	.dv &vname &vval
+	.ca end
+.ca end
+.dv export_var .dv vname $1 ^: .dv vval $2 ^: .dv $1 $2 ^: .im _fref_sub.ca
+.dv export_fig .gv fig .dv vname $1 ^: .dv vval ^&_fig ^: .dv $1 ^&_fig ^: .im _fref_sub.ca
+.dv export_tab .gv table .dv vname $1 ^: .dv vval ^&_table ^: .dv $1 ^&_table ^: .im _fref_sub.ca
+
+.** imbed pass 1 generated variables, or ensure file is reset
+.gv e PASS _pass
+.if &_pass 2 =
+    .im _fref.ca
+.ei
+    .ca start _fref.ca
+.ca end
+.fi
