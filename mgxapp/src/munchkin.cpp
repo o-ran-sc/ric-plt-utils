@@ -78,34 +78,23 @@
 
 	Data will be a pointer to our context.
 */
-extern void muncher1_cb( Message& mbuf, int mtype, int subid, int len, Msg_component payload,  void* data ) {
-	munchkin::Context*	ctx;								// we expect data to be our context
-	std::shared_ptr<munchkin::Rthing> rtk;					// remote thing knowledge
-	std::unique_ptr<unsigned char>	upsrc;			// message source from the mbuf
-	std::string	event;								// ves event
-	std::shared_ptr<munchkin::Ves_sender> sender;
-	char*		pbytes;
-	char*		src;
-	std::shared_ptr<Jhash>	jh;						// parsed json in a hash
-	std::string	sval;								// raw string from the json
-	std::string	reporter;
-	std::string affected = "";
+extern void muncher1_cb( xapp::Message& mbuf, int mtype, int subid, int len, xapp::Msg_component payload,  void* data ) {
+	std::string	event;					// ves event
+	char*		pbytes;					// direct porinter to the bytes in the payload
 	double		timestamp = 0.0;
-	std::string id;
-	std::string type;
-	double		value;
-	int			i;
-	int			nele;								// number of data elements
-	double		fts;
+	double		value;					// value sussed from json goo
 	long long	delta;
 
-	ctx = (munchkin::Context *) data;
+	if( data == NULL ) {
+		mt_log( MT_LOG_WARN, "msg callback called with nil context pointer; message dropped" );
+		return;
+	}
+	munchkin::Context* ctx = (munchkin::Context *) data;
 
-	//src = (char *) (mbuf.Get_src()).get();  // this does NOT work for some reason
-	upsrc =   mbuf.Get_src();
-	reporter = std::string( (char *) upsrc.get() );			// default reporter is the source of the message
+	auto upsrc = mbuf.Get_src();
+	auto reporter = std::string( (char *) upsrc.get() );		// grab sender (key to find rt knowledge)
 
-	rtk =  ctx->Find_rt( reporter );						// bad things if we can't find/make a rt; so abort on nil
+	auto rtk = ctx->Find_rt( reporter );						// ptr to knowledge aobut a remote thing
 	if( rtk == NULL ) {
 		return;
 	}
@@ -113,25 +102,26 @@ extern void muncher1_cb( Message& mbuf, int mtype, int subid, int len, Msg_compo
 	rtk->Inc_count();
 	delta = rtk->Set_access_ts();				// update the timetamp in the rt and give back the delta
 
-	src = (char *) upsrc.get();
-	mt_log( MT_LOG_INFO, (char *) "callback has received a message len=%d from src=%s\n", len, src );
+	mt_log( MT_LOG_INFO, (char *) "callback has received a message len=%d from src=%s\n", len, reporter.c_str() );
 
 	pbytes = (char *) payload.get();
-	mt_log( MT_LOG_DEBUG, (char *) "message: (%s)\n", len, pbytes );
+	mt_log( MT_LOG_DEBUG, (char *) "message: %d bytes (%s)\n", len, pbytes );
 
-	jh = std::shared_ptr<Jhash>( new Jhash( pbytes ) );			// parse the json, get a hash context
-	if( ! jh->Parse_errors() ) {								// parse was clean
-		sval = jh->String( (char *) "reporter" );
+	auto jh = std::shared_ptr<xapp::Jhash>( new xapp::Jhash( pbytes ) );			// parse the json, get a hash context
+	if( ! jh->Parse_errors() ) {													// parse was clean
+
+		auto sval = jh->String( (char *) "reporter" );				// overrided default if in the json
 		if( sval.compare( "" ) != 0 ) {
 			reporter = sval;
 		}
 
-		sval = jh->String( (char *) "affected" );
+		std::string affected = reporter;							// affected system is reporter by default
+		sval = jh->String( (char *) "affected" );					// but might be overridden
 		if( sval.compare( "" ) != 0 ) {
 			affected = sval;
 		}
 
-		if(  jh->Exists( (char *) "timestamp" ) ) {
+		if( jh->Exists( (char *) "timestamp" ) ) {
 			timestamp = jh->Value( (char *) "timestamp" );
 			if( timestamp < 10000000000.0 ) {
 				timestamp *= 1000000.0;					// assume seconds passed and convert to mu-s
@@ -147,13 +137,13 @@ extern void muncher1_cb( Message& mbuf, int mtype, int subid, int len, Msg_compo
 		event = munchkin::event_build( jh,  rtk, timestamp, delta, reporter, affected );
 		if( event.compare( "" ) != 0 ) {
 			mt_log( MT_LOG_DEBUG, (const char *) "muncher_cb: generating event: %s\n", event.c_str() );
-			sender = ctx->Get_sender();
-			sender->Send_event( event );
+
+			ctx->Get_sender()->Send_event( event );
 		}
 
 		return;
 	} else {
-		mt_log( MT_LOG_WARN, "unparsable json received from: %s", src );
+		mt_log( MT_LOG_WARN, "unparsable json received from: %s", reporter.c_str() );
 	}
 
 	mt_log( MT_LOG_WARN, (char *) "<MUNCHKIN> unable to parse the json: %s\n", pbytes );
@@ -162,7 +152,7 @@ extern void muncher1_cb( Message& mbuf, int mtype, int subid, int len, Msg_compo
 /*
 	Default callback for any unrecognised message.
 */
-void default_cb( Message& mbuf, int mtype, int subid, int len, Msg_component payload,  void* data ) {
+void default_cb( xapp::Message& mbuf, int mtype, int subid, int len, xapp::Msg_component payload,  void* data ) {
 	mt_log( MT_LOG_WARN, (char *) "<MUNCHKIN> default_cb: unrecognised message received: type=%d subid=%d len=%d\n", mtype, subid, len );
 }
 
@@ -176,7 +166,7 @@ int main( int argc, char** argv ) {
 	bool						wait4rt = false;
 	bool						hr_logging = false;				// true if human readable logging requested
 	char*						token;
-	std::shared_ptr<Jhash>		cjh;							// config file parsed into a framework jhash
+	std::shared_ptr<xapp::Jhash>	cjh;						// config file parsed into a framework jhash
 	std::string					cfilename = "";					// config file (-f)
 	std::string					svalue;
 	std::string					port_name= "rmr-data";			// default app name needed to find in config for port

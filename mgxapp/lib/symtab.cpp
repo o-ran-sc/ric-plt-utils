@@ -34,6 +34,7 @@
     Author:     E. Scott Daniels
 */
 
+#include <string.h>			// memset needs
 #include <cstdlib>
 #include <string>
 
@@ -100,6 +101,7 @@ void Symtab::Implant( std::string name, int space, std::shared_ptr<void> data ) 
 
 	if( st != NULL ) {
 		hto = (hto_t *) malloc( sizeof( *hto ) );			// raw pointer to give rmr_sym
+		memset( hto, 0, sizeof( *hto ) );					// clear to keep valgrind from complaining
 		hto->real_obj = data;
 		rmr_sym_put( st, name.c_str(), space, hto );
 	}

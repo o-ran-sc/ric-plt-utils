@@ -17,8 +17,12 @@
 #==================================================================================
 
 
-ALL_DOCS = rel_notes
+ALL_LIST = rel_notes
 include ../master.mk
 
-rel_notes.xfm:
+rel_notes.xfm: .always
 	gen_rel_notes.sh >rel_notes.xfm
+
+rel_notes.rst: rel_notes.xfm
+
+.always:
