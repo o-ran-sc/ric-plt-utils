@@ -42,7 +42,7 @@ int main( int argc, char** argv ) {
 	int	errors = 0;
 	std::string sjson;
 	char*	jbuf;					// json read from a file
-	std::shared_ptr<Jhash> jh = NULL;				// parsed json
+	std::shared_ptr<xapp::Jhash> jh = NULL;				// parsed json
 	std::string	event;
 	munchkin::Ves_sender* s;
 
@@ -60,7 +60,7 @@ int main( int argc, char** argv ) {
 		exit( 1 );
 	}
 
-	jh = std::shared_ptr<Jhash>( new Jhash( jbuf ) );
+	jh = std::shared_ptr<xapp::Jhash>( new xapp::Jhash( jbuf ) );
 	sjson = munchkin::mf_build( jh, 120000000, true );
 	fprintf( stderr, "<INFO> mf = (%s)\n", sjson.c_str() );
 

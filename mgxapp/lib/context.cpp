@@ -163,7 +163,7 @@ std::shared_ptr<munchkin::Ves_sender> munchkin::Context::Get_sender( ) {
 	Register a callback handler for a message type.
 	Simple passthrough at the moment.
 */
-void munchkin::Context::Register_cb( int mtype, user_callback cb_function ) {
+void munchkin::Context::Register_cb( int mtype, xapp::user_callback cb_function ) {
 	if( mtype < 0 ) {
 		mtype = x->DEFAULT_CALLBACK;
 	}

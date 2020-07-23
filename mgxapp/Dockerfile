@@ -23,12 +23,15 @@
 # ---- these are global and must be set before the first from directive
 #
 # package versions and locations for easier maintenance
-ARG RMR_VER=4.1.2
+ARG RMR_VER=4.1.4
 ARG LOG_VER=0.0.4
-ARG FRAME_VER=1.2.1
-ARG PKG_URL_BASE=https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/
+ARG FRAME_VER=2.1.0
+
+ARG PROD_URL_BASE=https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/
 ARG BETA_URL_BASE=https://packagecloud.io/o-ran-sc/staging/packages/debian/stretch/
 
+ARG LOG_BASE=${PROD_URL_BASE}
+ARG RMR_BASE=${BETA_URL_BASE}
 ARG FRAME_BASE=${BETA_URL_BASE}
 
 
@@ -43,16 +46,16 @@ RUN    apt-get update \
 ARG RMR_VER
 ARG LOG_VER
 ARG FRAME_VER
-ARG PKG_URL_BASE
-ARG BETA_URL_BASE
 ARG FRAME_BASE
+ARG RMR_BASE
+ARG LOG_BASE
 
 WORKDIR /playpen/down
 
-RUN    wget --content-disposition ${PKG_URL_BASE}/mdclog_${LOG_VER}-1_amd64.deb/download.deb \
-	&& wget --content-disposition ${PKG_URL_BASE}/mdclog-dev_${LOG_VER}-1_amd64.deb/download.deb  \
-	&& wget --content-disposition ${PKG_URL_BASE}/rmr-dev_${RMR_VER}_amd64.deb/download.deb  \
-	&& wget --content-disposition ${PKG_URL_BASE}/rmr_${RMR_VER}_amd64.deb/download.deb  \
+RUN    wget --content-disposition ${LOG_BASE}/mdclog_${LOG_VER}-1_amd64.deb/download.deb \
+	&& wget --content-disposition ${LOG_BASE}/mdclog-dev_${LOG_VER}-1_amd64.deb/download.deb  \
+	&& wget --content-disposition ${RMR_BASE}/rmr-dev_${RMR_VER}_amd64.deb/download.deb  \
+	&& wget --content-disposition ${RMR_BASE}/rmr_${RMR_VER}_amd64.deb/download.deb  \
 	&& wget --content-disposition ${FRAME_BASE}/ricxfcpp_${FRAME_VER}_amd64.deb/download.deb  \
 	&& wget --content-disposition ${FRAME_BASE}/ricxfcpp-dev_${FRAME_VER}_amd64.deb/download.deb  \
 	&& dpkg -i *deb
@@ -64,7 +67,8 @@ COPY ./ ./
 
 # build the utility; installs into /usr/local/bin
 #
-RUN	   mkdir .build \
+RUN    rm -fr .build \
+	&& mkdir .build \
 	&& cd .build \
 	&& cmake .. \
 	&& make install
@@ -83,14 +87,14 @@ WORKDIR /playpen/download
 ARG RMR_VER
 ARG LOG_VER
 ARG FRAME_VER
-ARG PKG_URL_BASE
-ARG BETA_URL_BASE
 ARG FRAME_BASE
+ARG LOG_BASE
+ARG RMR_BASE
 
 # only need run-time versions in the final container
 #
-RUN    wget --content-disposition ${PKG_URL_BASE}/mdclog_${LOG_VER}-1_amd64.deb/download.deb \
-	&& wget --content-disposition ${PKG_URL_BASE}/rmr_${RMR_VER}_amd64.deb/download.deb  \
+RUN    wget --content-disposition ${LOG_BASE}/mdclog_${LOG_VER}-1_amd64.deb/download.deb \
+	&& wget --content-disposition ${RMR_BASE}/rmr_${RMR_VER}_amd64.deb/download.deb  \
 	&& wget --content-disposition ${FRAME_BASE}/ricxfcpp_${FRAME_VER}_amd64.deb/download.deb  \
 	&& dpkg -i *deb \
 	&& rm *.deb

@@ -46,13 +46,13 @@ namespace munchkin {
 	The file read comes from a stack overflow example:
 		stackoverflow.com/questions/2912520/read-file-contents-into-a-string-in-c
 */
-extern std::shared_ptr<Jhash> Conf_parse( std::string fname ) {
-	std::shared_ptr<Jhash>	jh;
+extern std::shared_ptr<xapp::Jhash> Conf_parse( std::string fname ) {
+	std::shared_ptr<xapp::Jhash>	jh;
 
 	std::ifstream ifs( fname );
 	std::string st( (std::istreambuf_iterator<char>( ifs ) ), (std::istreambuf_iterator<char>() ) );
 
-	jh = std::shared_ptr<Jhash>( new Jhash( st.c_str() ) );
+	jh = std::shared_ptr<xapp::Jhash>( new xapp::Jhash( st.c_str() ) );
 	return  jh->Parse_errors() ? NULL : jh;
 }
 
@@ -60,7 +60,7 @@ extern std::shared_ptr<Jhash> Conf_parse( std::string fname ) {
 	Suss out the port for the named "interface". The interface is likely the application
 	name.
 */
-extern std::string Conf_get_port( std::shared_ptr<Jhash> jh, std::string name ) {
+extern std::string Conf_get_port( std::shared_ptr<xapp::Jhash> jh, std::string name ) {
 	int i;
 	int	nele = 0;
 	double value;
@@ -98,7 +98,7 @@ extern std::string Conf_get_port( std::shared_ptr<Jhash> jh, std::string name ) 
 	Suss out the named string from the control object. If the resulting value is
 	missing or "", then the default is returned.
 */
-extern std::string Conf_get_cvstr( std::shared_ptr<Jhash> jh, std::string name, std::string defval ) {
+extern std::string Conf_get_cvstr( std::shared_ptr<xapp::Jhash> jh, std::string name, std::string defval ) {
 	std::string value;
 	std::string rv;				// result value
 
@@ -125,7 +125,7 @@ extern std::string Conf_get_cvstr( std::shared_ptr<Jhash> jh, std::string name, 
 	Convenience funciton.
 	No default value; returns "" if not set.
 */
-extern std::string Conf_get_cvstr( std::shared_ptr<Jhash> jh, std::string name ) {
+extern std::string Conf_get_cvstr( std::shared_ptr<xapp::Jhash> jh, std::string name ) {
 	return Conf_get_cvstr( jh, name, "" );
 }
 
@@ -133,7 +133,7 @@ extern std::string Conf_get_cvstr( std::shared_ptr<Jhash> jh, std::string name )
 	Suss out the named field from the control object with the assumption that it is a boolean.
 	If the resulting value is missing then the defval is used.
 */
-extern bool Conf_get_cvbool( std::shared_ptr<Jhash> jh, std::string name, bool defval ) {
+extern bool Conf_get_cvbool( std::shared_ptr<xapp::Jhash> jh, std::string name, bool defval ) {
 	bool value;
 	bool rv;				// result value
 
@@ -157,7 +157,7 @@ extern bool Conf_get_cvbool( std::shared_ptr<Jhash> jh, std::string name, bool d
 /*
 	Convenience function.
 */
-extern bool Conf_get_cvbool( std::shared_ptr<Jhash> jh, std::string name ) {
+extern bool Conf_get_cvbool( std::shared_ptr<xapp::Jhash> jh, std::string name ) {
 	return Conf_get_cvbool( jh, name, false );
 }
 
