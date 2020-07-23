@@ -42,12 +42,12 @@ namespace munchkin {
 
 
 // ------------ prototypes -----------------------------------------------------
-std::shared_ptr<Jhash> Conf_parse( std::string fname );
-extern std::string Conf_get_port( std::shared_ptr<Jhash> jh, std::string name );
-extern bool Conf_get_cvbool( std::shared_ptr<Jhash> jh, std::string name, bool defval );
-extern bool Conf_get_cvbool( std::shared_ptr<Jhash> jh, std::string name );
-extern std::string Conf_get_cvstr( std::shared_ptr<Jhash> jh, std::string name, std::string defval );
-extern std::string Conf_get_cvstr( std::shared_ptr<Jhash> jh, std::string name );
+std::shared_ptr<xapp::Jhash> Conf_parse( std::string fname );
+extern std::string Conf_get_port( std::shared_ptr<xapp::Jhash> jh, std::string name );
+extern bool Conf_get_cvbool( std::shared_ptr<xapp::Jhash> jh, std::string name, bool defval );
+extern bool Conf_get_cvbool( std::shared_ptr<xapp::Jhash> jh, std::string name );
+extern std::string Conf_get_cvstr( std::shared_ptr<xapp::Jhash> jh, std::string name, std::string defval );
+extern std::string Conf_get_cvstr( std::shared_ptr<xapp::Jhash> jh, std::string name );
 
 
 

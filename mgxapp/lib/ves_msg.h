@@ -89,7 +89,7 @@ namespace munchkin {
 
 
 // ------------ prototypes -----------------------------------------------------
-std::string event_build( std::shared_ptr<Jhash> jh, std::shared_ptr<Rthing> rt, long long ts, long long delta, std::string reporter, std::string affected );
+std::string event_build( std::shared_ptr<xapp::Jhash> jh, std::shared_ptr<Rthing> rt, long long ts, long long delta, std::string reporter, std::string affected );
 
 
 // ---------------- simple class to send messages via mule (curl) to the ves thing ----------

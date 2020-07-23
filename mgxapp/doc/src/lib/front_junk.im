@@ -87,20 +87,44 @@ vi: ts=4 sw=4 noet:
 		.pa
 		.pn on 0 center f=%d noline
 	.fi
-.fi
 
-.if [ "&{ot!missing} "rst" "RST" Match ]
-	.dv _comment_sym ^^..
-.fi
-
-
-.if _comment_sym
-	      &_comment_sym &lic_txt1
-	.br   &_comment_sym &lic_txt2
-	.sp 1
-	      &_comment_sym CAUTION: this document is generated from source in doc/src/rtd.
-	.br   &_comment_sym To make changes edit the source and recompile the document.
-	.br   &_comment_sym Do NOT make changes directly to .rst or ^.md files.
-	.sp 1
+	.dv _comment_sym %
 .ei
+	.if [ "&{ot!missing} "rst" "RST" Match ]
+		.dv _comment_sym ..
+	.fi
+.fi
+
+
+.** if we have a "raw" comment symbol that can be used, put out the
+.** licence as a comment in the doc which we assume is NOT shown when
+.** the doc is rendered. We use a capture file so that we can expand the
+.** comment symbols yet still have a no format imbed.
+.**
+.if _comment_sym
+.ca expand start _raw_lic.ca
+.pu
+.in 0i
+.ai
+
+&_comment_sym This work is licensed under a Creative Commons Attribution 4.0
+&_comment_sym International License.  SPDX-License-Identifier: CC-BY-4.0
+
+.fo
+.sp 1
+
+.ai
+
+&_comment_sym CAUTION: this document is generated from source in mgxapp/doc/src/.
+&_comment_sym To make changes edit the source and recompile the document.
+&_comment_sym Do NOT make changes directly to .rst or ^.md files.
+
+.fo
+.sp 2
+
+.po
+.ca end
+
+.im _raw_lic.ca
+.fi
 

@@ -40,7 +40,7 @@
 /*
 	Function to pass to register callback; does nothing pratical in the test.
 */
-extern void ctx_test_cb( Message& mbuf, int mtype, int subid, int len, Msg_component payload,  void* data ) {
+extern void ctx_test_cb( xapp::Message& mbuf, int mtype, int subid, int len, xapp::Msg_component payload,  void* data ) {
 	fprintf( stderr, "<INFO> test_cb: should never see this message\n" );
 }
 

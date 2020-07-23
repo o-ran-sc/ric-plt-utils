@@ -50,6 +50,14 @@
 .im cmd_master.im
 &line_len(6i)
 
+.** this is needed for RST generation as the latest RTD parser doesn't wrap lines in a table
+.** unless we force it to do so by adding blank lines between each.
+&force_diterm_breaks
+
+.** trim spaces until {X} cmd macros are fixed
+.** .dv di        ^&row_sep  * -  **${*1}** .in +&_ch2 - .in +&_ch2 .dv row_sep .sp 1 | .in -&{_ch4} .sp 1 ^:
+
+
 .**  The spacing in the {X}fm default is too much IMHO; reduce for h2
 .if pfm
 	.dh 2 s=1,.5
@@ -96,7 +104,7 @@ in figure &schema_fig:
     If omitted, the time that the message is received by the &munchkin is used (not
     recommended).
 
-&half_sapce
+&half_space
 &di(Data) The data array is an array with one or more objects that define a specific statistic (measurement).
 	Each object must specify an &cw(ID) and &cw(value,) and may optionally supply a type.
 	(The type is not currently used, but might in the future be used to identify
@@ -214,7 +222,7 @@ The binary is &cw(munchkin) and is installed by default in &cw(/usr/local/bin.)
 &h2(Environment Variables)
 The usual RMR environment variables will have the expected effect if they are
 set when the process is invoked.
-Currently the &munchking does not expect, or use, any environment variables;
+Currently the &munchkin does not expect, or use, any environment variables;
 all configuration is controlled by command line options and/or the configuration
 file.
 .if false

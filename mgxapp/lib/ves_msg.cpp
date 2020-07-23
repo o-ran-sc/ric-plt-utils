@@ -49,7 +49,7 @@ namespace munchkin {
 /*
 	Return the type of the json value.
 */
-static int get_jtype(  std::shared_ptr<Jhash> jh, const char* name ) {
+static int get_jtype(  std::shared_ptr<xapp::Jhash> jh, const char* name ) {
 	if( jh->Is_string( (char *) "value" ) ) {
 		return JT_STRING;
 	}
@@ -201,7 +201,15 @@ std::string eh_build( std::shared_ptr<Rthing> rt, long long ts, std::string repo
 	return std::string( wbuf );
 }
 
-/* Measurement field builder. Returns a named object of the form: "measurementFields": { "additionalFields": { "SgNB Request Rate": "100", "SgNB Accept Rate": "10" }, "measurementInterval": 60,
+/*
+	Measurement field builder. Returns a named object of the form:
+
+		"measurementFields": {
+			"additionalFields": {
+				"SgNB Request Rate": "100",
+				"SgNB Accept Rate": "10"
+			}, "
+			measurementInterval": 60,
 			"measurementFieldsVersion": "4.0"
 		}
 
@@ -212,19 +220,18 @@ std::string eh_build( std::shared_ptr<Rthing> rt, long long ts, std::string repo
 	"name", "type", and "value" fields. Delta is the time delta in mu-seconds.
 
 */
-std::string mf_build( std::shared_ptr<Jhash> jh, long long delta, bool is_last ) {
+std::string mf_build( std::shared_ptr<xapp::Jhash> jh, long long delta, bool is_last ) {
 	char	jbuf[ 4096];				// json buffer
 	char	vbuf[128];					// conversion of a value to string
 	int		i;
 	int		len;						// data array length
-	std::string	name;
-	std::string sval;
 	double	val;
 	int		flags = MT_NO_FLAGS;
 
 	jbuf[0] = 0;
 
 	if( (len = jh->Array_len( (char *) "data" )) <= 0 ) {
+		mt_log( MT_LOG_WARN, (char *) "field builder: no data found in json ((len=%d)\n", len );
 		return std::string( jbuf );							// don't generate an empty object when data missing
 	}
 
@@ -236,10 +243,15 @@ std::string mf_build( std::shared_ptr<Jhash> jh, long long delta, bool is_last )
 			flags = MT_FL_CLOSE;
 		}
 
-		jh->Set_blob_ele( (char *) "data", i );
+		jh->Unset_blob();												// ensure we are at the root
+		if( ! jh->Set_blob_ele( (char *) "data", i ) ) {				// select next data element
+			mt_log( MT_LOG_WARN, (char *) "field builder: unable to suss data[%d]", i );
+			continue;
+		}
 
-		name = jh->String( (char *) "name" );
-		if( name.compare( "" ) != 0 ) {
+		auto name = jh->String( (char *) "id" );			// extract name from it
+		mt_log( MT_LOG_DEBUG, (char *) "field builder: adding field [%d] %s", i, name.c_str() );
+		if( ! name.empty() ) {
 			switch( get_jtype( jh, (char *) "value" ) ) {
 				case JT_VALUE:
 					// for now we always write doubles; we could check "vtype" and use that to write int if needed
@@ -259,17 +271,21 @@ std::string mf_build( std::shared_ptr<Jhash> jh, long long delta, bool is_last )
 					json_add_nil( jbuf, sizeof( jbuf ), name.c_str(), flags );
 					break;
 			}
-
-			jh->Unset_blob( );
-
+		} else {
+			mt_log( MT_LOG_WARN, (char *) "field builder: missing ID from field [%d]", i );
+			if( flags & MT_FL_CLOSE ) {										// if closing we must add a nil field
+				json_add_nil( jbuf, sizeof( jbuf ), (char *) "unknown_id", flags );
+			}
 		}
 	}
+	jh->Unset_blob( );			// ensure we leave it back at the root
 
 	json_add_ll( jbuf, sizeof( jbuf ), MF_DELTA_TAG,  delta, MT_NO_FLAGS );
 
 	flags = is_last ?  MT_FL_LAST | MT_FL_CLOSE : MT_FL_CLOSE;
 	json_add_string( jbuf, sizeof( jbuf ), MF_VER_TAG, MF_VERSION_VAL, flags );
 
+	mt_log( MT_LOG_DEBUG, (char *) "field builder: final json `%s`", jbuf );
 	return std::string( jbuf );
 }
 
@@ -281,7 +297,7 @@ std::string mf_build( std::shared_ptr<Jhash> jh, long long delta, bool is_last )
 	The schema at https://git.opnfv.org/ves/tree/tests/docs/ves_data_model.json does NOT
 	list measurement fields which MC produces and we assume we can use.
 
-	From the schema, this could have all of this goop; onlyt the header is required:
+	From the schema, this could have all of this goop; only the header is required:
 
 		"event": {
             "commonEventHeader": { "$ref": "#/definitions/commonEventHeader" },
@@ -298,8 +314,8 @@ std::string mf_build( std::shared_ptr<Jhash> jh, long long delta, bool is_last )
           },
 
 */
-std::string event_build( std::shared_ptr<Jhash> jh, std::shared_ptr<Rthing> rt,
-		long long ts, long long delta, std::string reporter, std::string affected ) {
+std::string event_build( std::shared_ptr<xapp::Jhash> jh, std::shared_ptr<Rthing> rt,
+	long long ts, long long delta, std::string reporter, std::string affected ) {
 	std::string header;
 	std::string mfields;
 
@@ -309,5 +325,4 @@ std::string event_build( std::shared_ptr<Jhash> jh, std::shared_ptr<Rthing> rt,
 	return "{  \"event\": { " +  header + mfields + "} }";
 }
 
-
-} // end namespace ves
+} // namespace

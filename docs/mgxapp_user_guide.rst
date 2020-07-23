@@ -1,7 +1,7 @@
 .. This work is licensed under a Creative Commons Attribution 4.0
 .. International License.  SPDX-License-Identifier: CC-BY-4.0
 
-.. CAUTION: this document is generated from source in doc/src/rtd.
+.. CAUTION: this document is generated from source in mgxapp/doc/src/.
 .. To make changes edit the source and recompile the document.
 .. Do NOT make changes directly to .rst or ^.md files.
 
@@ -38,42 +38,81 @@ figure 1, with the schema shown in figure 2:
          :header-rows: 0
          :class: borderless
 
+
          * - **Source**
+
            -
+
              The name of the application which is sending the status
+
              value(s). If omitted the source from the RMR message
+
              (hostname:port) is used.
 
 
+
+
+
              |
 
+
+
          * - **Generator**
+
            -
+
              The name of the application which generated the value. If
+
              omitted the *source* is used.
 
 
+
+
+
              |
+
+
 
          * - **Timestamp**
+
            -
+
              This is an integer value which is the number of
+
              milliseconds since the UNIX epoch (Jan 1, 1970) and is
+
              forwarded as the time that the value was captured. If
+
              omitted, the time that the message is received by the
-             Metrics Gateway is used (not recommended). &half_sapce
+
+             Metrics Gateway is used (not recommended).
+
+
+
+
 
              |
 
+
+
          * - **Data**
+
            -
+
              The data array is an array with one or more objects that
+
              define a specific statistic (measurement). Each object
+
              must specify an ``ID`` and ``value,`` and may optionally
+
              supply a type. (The type is not currently used, but might
+
              in the future be used to identify the value as a counter,
+
              meter value, percentage, or similar classification that is
+
              meaningful to the process that the Metrics Gateway is
+
              forwarding to.
 
 
@@ -191,7 +230,7 @@ Environment Variables
 
 The usual RMR environment variables will have the expected
 effect if they are set when the process is invoked. Currently
-the &munchking does not expect, or use, any environment
+the Metrics Gateway does not expect, or use, any environment
 variables; all configuration is controlled by command line
 options and/or the configuration file.
 
@@ -213,94 +252,183 @@ supported:
          :header-rows: 0
          :class: borderless
 
+
          * - **-d**
+
            -
+
              Places logging into *debug* mode.
 
 
+
+
+
              |
 
+
+
          * - **-c config-file**
+
            -
+
              Supplies the name of the configuration file. (Described in
+
              a later section.)
 
 
+
+
+
              |
 
+
+
          * - **-l filename**
+
            -
+
              Writes the standard error messages to the named file
+
              rather than to standard error. Implies human readable
+
              format (the RIC logging library makes no provision to
+
              redirect messages). (This option is a lower case 'L.')
 
 
+
+
+
              |
 
+
+
          * - **-t n**
+
            -
+
              Number of threads. This is passed to the framework and
+
              allows for multiple concurrent callback threads to be
+
              created. Currently it is not anticipated that this will be
+
              needed.
 
 
+
+
+
              |
 
+
+
          * - **-P port-name**
+
            -
+
              Supplies the port name that should be matched in the
+
              *messaging* section of the configuration file. This option
+
              is valid only when the ``-c`` option is supplied and
+
              **must** be placed on the command line **before** the
+
              ``-c`` option. When not supplied, the port name that will
+
              be lifted from the config is *rmr-data.*
 
 
+
+
+
              |
 
+
+
          * - **-r**
+
            -
+
              Enable human readable messages written by the Metrics
+
              Gateway. By default, the Metrics Gateway uses the RIC
+
              logging library which generates unfriendly json encrusted
+
              output; this turns that off.
 
 
+
+
+
              |
 
+
+
          * - **-T url**
+
            -
+
              The URL of the process that is the target of Metrics
+
              Gateway output.
 
 
+
+
+
              |
 
+
+
          * - **-v**
+
            -
+
              Verbose mode. The Metrics Gateway will be chatty to the
+
              standard error device.
 
 
+
+
+
              |
 
+
+
          * - **-V**
+
            -
+
              Verbose mode. The Metrics Gateway will be chatty to the
+
              standard error device but will write human readable
+
              messages and not json encrusted log messages.
 
 
+
+
+
              |
 
+
+
          * - **-w**
+
            -
+
              Wait for RMR route table. Normally the Metrics Gateway
+
              does not need to wait for an RMR route table to arrive
+
              before it can start processing. Should that need arise,
+
              this option will put the Metrics Gateway into a hold until
+
              the table is received and validated.
 
 
@@ -380,49 +508,93 @@ section.
          :header-rows: 0
          :class: borderless
 
+
          * - **collector_url**
+
            -
+
              Defines the URL that the Metrics Gateway will forward
+
              metrics to.
 
 
+
+
+
              |
 
+
+
          * - **log_file**
+
            -
+
              Supplies a destination for messages which are normally
+
              written to the standard error. This applies only if the
+
              human readable messages option is true as the RIC logging
+
              library makes no provision for capturing log messages in a
+
              named file.
 
 
+
+
+
              |
 
+
+
          * - **wait4rt**
+
            -
+
              Causes the Metrics Gateway to wait for an RMR route table
+
              to be received and installed before starting. Normally a
+
              route table is not needed by the Metrics Gateway, so
+
              processing can begin before any route table is received.
 
 
+
+
+
              |
 
+
+
          * - **hr_logs**
+
            -
+
              When set to ``true`` causes human readable messages to be
+
              written to standard error rather than the json encrusted
+
              messages generated by the RIC logging library. The default
+
              if omitted is ``false.``
 
 
+
+
+
              |
 
+
+
          * - **log_level**
+
            -
+
              Defines the log level which should be one of the following
+
              strings: ``crit, err, warn, info,`` or ``debug.`` If not
+
              supplied, the default is ``warn.``
 
 

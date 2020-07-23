@@ -57,7 +57,6 @@ XPATH = /usr/local/share/xfm:..
 # ALL_LIST names each doc; we'll generate all forms of supported output
 all: $(ALL_LIST:%=%.ps) $(ALL_LIST:%=%.md) $(ALL_LIST:%=%.txt) $(ALL_LIST:%=%.rst)
 
-
 # ----------- publishing generatd output --------------------------------------------
 
 # copy the .rst versions to the top level docs directory for RTD scraping
