@@ -66,7 +66,7 @@ class Context {
 
 		std::shared_ptr<Rthing> Find_rt( std::string id );
 		std::shared_ptr<Ves_sender> Get_sender( );
-		void Register_cb( int mtype, user_callback cb_function );
+		void Register_cb( int mtype, xapp::user_callback cb_function );
 		void Run( int nthreads );
 };
 

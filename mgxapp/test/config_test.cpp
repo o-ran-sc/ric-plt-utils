@@ -40,7 +40,7 @@
 */
 static int drive_config( std::string fname, bool expect_port ) {
 	int errors = 0;
-	std::shared_ptr<Jhash>	jh;
+	std::shared_ptr<xapp::Jhash>	jh;
 	std::string svalue;
 	std::string url_def;
 	bool	bvalue;
@@ -87,7 +87,7 @@ static int drive_config( std::string fname, bool expect_port ) {
 
 int main( int argc, char** argv ) {
 	std::string svalue;
-	std::shared_ptr<Jhash>	jh;
+	std::shared_ptr<xapp::Jhash>	jh;
 	int errors = 0;
 
 	set_test_name( "config_test" );

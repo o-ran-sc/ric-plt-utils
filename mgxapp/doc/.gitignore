@@ -3,9 +3,12 @@
 *.rst
 *.md
 *.pdf
+*.txt
 
 # intermediate files which can lie around
 *.ca
 *.sp
 *.bcnfile
 *.toc
+
+*-

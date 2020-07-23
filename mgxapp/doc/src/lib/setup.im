@@ -55,8 +55,8 @@ vi: ts=4 sw=4 noet:
 .** passed as $1 (name) with the value passed as $2 and will add it to the fref.ca file.
 .**
 .ca shift start _fref_sub.ca
-	.** be careful... the next  'ca end' MUST be tab indented before {X} version 2.4.
-	.** with 2.4 and after it can be space indented
+.** be careful... the next  "ca end" MUST be tab indented before {X} version 2.4.
+.** with  2.4 and after it can be space indented
 
 	.ca expand extend _fref.ca
 	.dv &vname &vval
