@@ -23,16 +23,16 @@
 # ---- these are global and must be set before the first from directive
 #
 # package versions and locations for easier maintenance
-ARG RMR_VER=4.1.4
-ARG LOG_VER=0.0.4
-ARG FRAME_VER=2.1.0
+ARG RMR_VER=4.7.4
+ARG LOG_VER=0.1.2
+ARG FRAME_VER=2.3.3
 
 ARG PROD_URL_BASE=https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/
 ARG BETA_URL_BASE=https://packagecloud.io/o-ran-sc/staging/packages/debian/stretch/
 
 ARG LOG_BASE=${PROD_URL_BASE}
-ARG RMR_BASE=${BETA_URL_BASE}
-ARG FRAME_BASE=${BETA_URL_BASE}
+ARG RMR_BASE=${PROD_URL_BASE}
+ARG FRAME_BASE=${PROD_URL_BASE}
 
 
 # -----------------------------------------------------------------------------------------------------
